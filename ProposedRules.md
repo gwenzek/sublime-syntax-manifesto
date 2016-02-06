@@ -3,11 +3,11 @@
 * comment: for comments.
   * line: line comments, we specialize further so that the type of comment start character(s) can be extracted from the scope.
     * double-slash: `//` comment
-    * double-dash: :` comment
+    * double-dash: `--` comment
     * number-sign: `#` comment
     * percentage: `%` comment
     * character: other types of line comments.
-  * block: multi-line comments like `/* … */` and `<: …:>`.
+  * block: multi-line comments like `/* … */` and `<-- … -->`.
     * documentation: embedded documentation.
   * todo: comments are often used to take notes.
   So if it nice when the syntax highlight words such as TODO, XXX, HACK, ...
@@ -21,11 +21,7 @@
 
 * entity: an entity refers to a larger part of the document, for example a chapter, class, function, or tag.
 The scope entity is used only for tagging a declaration. For example `entity.name.class` will only be used on `Foo` in the following code,
-but the code between brackets will wear a `meta.class.body` scope.
-
-    class Foo {
-
-    }
+but the code between brackets will wear a `meta.class.body` scope. `class Foo { ... }`
 
   * name: we are naming the larger entity.
     * function: the name of a function.
