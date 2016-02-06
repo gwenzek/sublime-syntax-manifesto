@@ -1,5 +1,5 @@
 import os
-import wget
+import sys
 import zipfile
 
 
@@ -15,5 +15,8 @@ def extract(filename, output_path):
 
 if __name__ == '__main__':
 
-    wget.download("https://github.com/sublimehq/Packages/archive/master.zip")
-    extract('Packages-master.zip', 'syntaxes')
+    args = sys.argv
+    archive = args[1] if len(args) > 1 else 'Packages-master.zip'
+    folder = args[2] if len(args) > 2 else 'syntaxes'
+    print archive, folder
+    extract(archive, folder)

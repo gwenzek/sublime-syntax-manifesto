@@ -2,17 +2,20 @@
 
 all: scopes
 
-download: syntaxes
+download: master.zip
 
-syntaxes:
-	mkdir syntaxes
-	python download.py
-	rm Packages-master.zip
+master.zip:
+	wget "https://github.com/sublimehq/Packages/archive/master.zip"
+
+syntaxes: master.zip
+	mkdir $@
+	python extract_syntaxes.py $< $@
 
 scopes: syntaxes
-	mkdir scopes
+	mkdir $@
 	python extract_scopes.py
 
 clean:
-	# rm -r syntaxes
+	# rm master.zip
+	rm -r syntaxes
 	rm -r scopes
