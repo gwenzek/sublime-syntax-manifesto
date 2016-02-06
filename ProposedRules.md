@@ -3,12 +3,14 @@
 * comment: for comments.
   * line: line comments, we specialize further so that the type of comment start character(s) can be extracted from the scope.
     * double-slash: `//` comment
-    * double-dash: `--` comment
+    * double-dash: :` comment
     * number-sign: `#` comment
     * percentage: `%` comment
     * character: other types of line comments.
-  * block: multi-line comments like `/* … */` and `<!-- … -->`.
+  * block: multi-line comments like `/* … */` and `<: …:>`.
     * documentation: embedded documentation.
+  * todo: comments are often used to take notes.
+  So if it nice when the syntax highlight words such as TODO, XXX, HACK, ...
 
 * constant: various forms of constants.
   * numeric: those which represent numbers, e.g. `42`, `1.3f`, `0x4AB1U`.
@@ -28,8 +30,8 @@ but the code between brackets will wear a `meta.class.body` scope.
   * name: we are naming the larger entity.
     * function: the name of a function.
     * type: the name of a type declaration or class.
-    * class - redundant with type but most languages use `class` instead of `type`
-    * tag: a tag name.
+    * class: redundant with type but most languages use `class` instead of `type`
+    * tag: a tag name or any annotation (like `@obsolete` in java).
     * section: the name is the name of a section/heading.
   * other: other entities.
     * inherited-class: the superclass/baseclass name.
@@ -119,7 +121,45 @@ These scopes are used to delimite the code scopes.
 * variable: variables. Not all languages allow easy identification (and thus markup) of these.
   Any of the following can be appended with `type`. Indeed types can be parameters (think of generic functions), arguments, provided by the language, ...
   * parameter: when the variable represent the parameter of a function.
-  Used inside the function declaration
-  * argument: when the variable is use to refer to an argument of a function, ie when the function is called (does that make sense?)
+  Used inside the function declaration or when calling a function when explicitly naming the parameter.
   * language: reserved language variables like this, super, self, etc.
   * other: other variables, like $some_variables.
+
+* punctuation: Punctuation is really important for the compiler, let's make it useful for the programmers too !
+All punctuations scopes should be appended with `begin` or `end` to tell if they are marking the begin or the end of something.
+  * definition
+    * arguments: the parenthesis for function call
+    * arguments.type: the punctuation marking type arguments during function call
+    * parameters: the parenthesis for function definition.
+    There is a different scope for function calls and function definitions because most of the time you want to highlight function definitions, as they are the backbone of the code, while function calls are too common to be all highlighted.
+    * parameters.type
+    * expression: some languages introduce parenthesis for delimiting specific expressions.
+    Like in C: `if(x == 0)`.
+    * function: For punctuation delimiting inline function/lambda definition
+    * array: For punctuation marking array, list, tuple, ...
+    * string: Specific scope for the quotes
+    * other
+  * section: for punctuation enclosing large part of code. Most of the time it's `{` and `}`.
+    * module: (also namespace, package, ...)
+    * class
+    * function
+    * conditional
+    * loop
+    * trycatch
+    * switch
+    * other
+    * merge: a special scope for marking annotation inserted by a version control merge.
+    In git it's `<<<<<<<` and `>>>>>>>`.
+    Matching them avoid the syntax to break when reading files being merged.
+  * separator: for all the `,` dandling around :-)
+    * accessor: for the dot `.` in `foo.bar()`
+    * argument: for separating the argument of a function
+    * array-element: for separating the values of an array, list, tuple
+    * key-value: in python the `:` in `dictionary = {'a' : 0, 'b': 1}`
+    * key-value.parameter: used to assign a value to a parameter.
+    In python the `=` in `foo(bar=0)`
+    * merge: in git it's `=======`
+    * module: for punctuation inside module import
+    * parameter
+    * parameter.type
+  * terminator.statement: a whole scope just for `;`
