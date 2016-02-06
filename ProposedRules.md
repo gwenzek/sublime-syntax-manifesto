@@ -96,13 +96,13 @@ These scopes are used to delimite the code scopes.
 
 * string: strings.
   * quoted: quoted strings.
-    * single: single quoted strings: 'foo'.
-    * double: double quoted strings: "foo".
-    * triple: triple quoted strings: """Python""".
-    * other: other types of quoting: $'shell', %s{...}.
+    * single: single quoted strings: `'foo'`.
+    * double: double quoted strings: `"foo"`.
+    * triple: triple quoted strings: `"""Python"""`.
+    * other: other types of quoting: `$'shell'`, `%s{...}`.
   * unquoted: for things like here-docs and here-strings.
-  * interpolated: strings which are “evaluated”: `date`, $(pwd).
-  * regexp: regular expressions: /(\w+)/.
+  * interpolated: strings which are “evaluated”: `date`, `$(pwd)`.
+  * regexp: regular expressions: `/(\w+)/`.
   * other: other types of strings (should rarely be used).
 
 * support: things provided by a framework or library should be below support.
