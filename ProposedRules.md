@@ -17,6 +17,7 @@
   * character: those which represent characters, e.g. `&lt;`, `\e`, `\031`.
     * escape: escape sequences like `\e` would be constant.character.escape.
   * language: constants (generally) provided by the language which are “special” like `true`, `false`, `nil`, `YES`, `NO`, etc.
+  * annotation: code decorator like `@override` in Java
   * other: other constants, e.g. colors in CSS.
 
 * entity: an entity refers to a larger part of the document, for example a chapter, class, function, or tag.
@@ -27,11 +28,11 @@ but the code between brackets will wear a `meta.class.body` scope. `class Foo { 
     * function: the name of a function.
     * type: the name of a type declaration or class.
     * class: redundant with type but most languages use `class` instead of `type`
-    * tag: a tag name or any annotation (like `@obsolete` in java).
+    * tag: used for markup languages like `xml` when 
     * section: the name is the name of a section/heading.
   * other: other entities.
-    * inherited-class: the superclass/baseclass name.
-    * attribute-name: the name of an attribute (mainly in tags).
+    * inherited-class: replaced by `variable.type.inherited`, do not use
+    * attribute-name: removed, use `entity.name.tag`
 
 * invalid: stuff which is “invalid”.
   * illegal: illegal, e.g. an ampersand or lower-than character in HTML (which is not part of an entity/tag).
@@ -43,13 +44,13 @@ but the code between brackets will wear a `meta.class.body` scope. `class Foo { 
     * trycatch: any of `try`, `catch`, `finally` and `throw` or other keyword for handling exceptions
     * loop: any of `for`, `foreach`, `while`, ...
     * flow: keywords changing the normal flow of execution: `return`, `break`, `goto`, ...
+  * import: `import`, `include`, `using`, and other keyword used inside import statement: `from ... import ... as ...`
   * operator: operators can either be textual (e.g. `or`) or be characters.
     * arithmetic: `+`, `-`, `*`, ...
     * logical: `&`, `|`, `or`, `and`, ...
     * comparaison: `<`, `>`, `==`, `is`, ...
     * assignement: for variable assignement `=`, `:=`, `+=`, ...
-  * declaration
-    * new: a whole scope just for `new`
+  * declaration: keyword used for creating object like `new`
   * other: other keywords.
 
 * markup: this is for markup languages and generally applies to larger subsets of the text.
@@ -87,7 +88,7 @@ These scopes are used to delimite the code scopes.
 * storage: things relating to “storage”.
   * type: the type of something, class, function, var, etc.
   In some languages (like C) the `type` of a variable, like `int` is used both to mark the object as a variable and to precise that it's an integer.
-  In this case consider using, `variable.other.type` instead.
+  In this case consider using, `variable.type` instead.
     * class
     * function
     * variable
@@ -115,17 +116,22 @@ These scopes are used to delimite the code scopes.
   * constant: duplicate of `constant.language` shouldn't be used
 
 * variable: variables. Not all languages allow easy identification (and thus markup) of these.
-  Any of the following can be appended with `type`. Indeed types can be parameters (think of generic functions), arguments, provided by the language, ...
   * parameter: when the variable represent the parameter of a function.
   Used inside the function declaration or when calling a function when explicitly naming the parameter.
   * language: reserved language variables like this, super, self, etc.
+  * function: function, lambda, ...
+  * type
+    * parameter: when the type is used in a generic function
+    * language: when the type is provided by the language
+    * inherited: the superclass/baseclass name. Replace entity.other.inherited-class
   * other: other variables, like $some_variables.
 
 * punctuation: Punctuation is really important for the compiler, let's make it useful for the programmers too !
 All punctuations scopes should be appended with `begin` or `end` to tell if they are marking the begin or the end of something.
+  * accessor: the `.` in most languages: `foo.bar` or `::` in C++: `foo::bar`
   * definition
     * arguments: the parenthesis for function call
-    * arguments.type: the punctuation marking type arguments during function call
+    * arguments.type: the punctuation marking type arguments during function call, in java `<` and `>` like in : `public static <E> void printArray(E[] inputArray)`
     * parameters: the parenthesis for function definition.
     There is a different scope for function calls and function definitions because most of the time you want to highlight function definitions, as they are the backbone of the code, while function calls are too common to be all highlighted.
     * parameters.type
