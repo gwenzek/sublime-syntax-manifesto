@@ -1,4 +1,5 @@
 import os
+import sys
 import yaml
 
 
@@ -62,16 +63,20 @@ def write_summary(count, filename):
 
 if __name__ == '__main__':
 
+    args = sys.argv[1:]
+    syntaxes_dir = args[0]
+    scopes_dir = args[1]
+
     count = {}
 
-    for filename in os.listdir('syntaxes'):
-        out_path = os.path.join('scopes', os.path.splitext(filename)[0] + '.txt')
+    for filename in os.listdir(syntaxes_dir):
+        out_path = os.path.join(scopes_dir, os.path.splitext(filename)[0] + '.txt')
         with open(out_path, 'w') as out:
-            scopes = extract_scopes(os.path.join('syntaxes', filename))
+            scopes = extract_scopes(os.path.join(syntaxes_dir, filename))
             for scope in scopes:
                 increment_count(count, scope)
                 out.write(scope)
                 out.write('\n')
             print 'found', len(scopes), 'scopes in syntax file', os.path.basename(filename)
 
-    write_summary(count, 'summary.txt')
+    write_summary(count, 'summary.syntaxes.txt')

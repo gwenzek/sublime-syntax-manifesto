@@ -1,5 +1,7 @@
-/script/scopes
 /script/syntaxes
+/script/extracted_syntaxes/
+/script/themes/
+/script/extracted_themes/
 
-/script/master.zip
-/script/summary.txt
+/script/*.zip
+/script/summary.*.txt
