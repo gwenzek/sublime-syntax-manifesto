@@ -30,6 +30,9 @@ summary.syntaxes.txt: extracted_syntaxes extract_scopes.py
 	mkdir -p syntaxes
 	python extract_scopes.py $< syntaxes $@
 
+summary: compare.py summary.syntaxes.txt summary.themes.txt
+	python $^
+
 clean:
 	rm -r ./*/
 	rm summary.*.txt
