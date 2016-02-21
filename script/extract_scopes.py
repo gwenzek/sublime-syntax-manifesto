@@ -1,14 +1,32 @@
 import os
 import sys
+import plistlib
 import yaml
 
 
 def extract_scopes(filename):
-    scopes = set(extract_all_scopes(filename))
+    if filename.endswith('.tmTheme'):
+        scopes = set(extract_scopes_from_plist(filename))
+    elif filename.endswith('.sublime-syntax'):
+        scopes = set(extract_scopes_from_yaml(filename))
+    else:
+        raise Exception('Format not recognized for: ' + filename)
+
+    scopes = set(flatten(yield_scopes_and_subscopes, scopes))
     return sorted(scopes)
 
 
-def extract_all_scopes(filename):
+def extract_scopes_from_plist(filename):
+    theme = plistlib.readPlist(file(filename))
+    settings = theme['settings']
+    scopes = []
+    for settings in theme['settings']:
+        if 'scope' in settings:
+            scopes += list(split(settings['scope'], ' -', ',', ' '))
+    return scopes
+
+
+def extract_scopes_from_yaml(filename):
     syntax = yaml.load(file(filename))
     scopes = [syntax['scope']]
     # scopes = []
@@ -43,15 +61,32 @@ def _extract_scopes_from_yaml(array):
                     yield s
 
 
-def increment_count(count, scope):
+def yield_scopes_and_subscopes(scope):
     parts = scope.split('.')
     s = ''
     for p in parts:
         s = p if s == '' else s + '.' + p
-        if s in count:
-            count[s] += 1
-        else:
-            count[s] = 1
+        yield s
+
+
+def flatten(f, l):
+    for x in l:
+        for y in f(x):
+            yield y
+
+
+def split(string, *sep):
+    l = [string]
+    for s in sep:
+        l = list(map(lambda x: x.strip().strip('(').strip(')'), flatten(lambda x: x.split(s), l)))
+    return l
+
+
+def increment_count(count, scope):
+    if scope in count:
+        count[scope] += 1
+    else:
+        count[scope] = 1
 
 
 def write_summary(count, filename):
@@ -66,6 +101,7 @@ if __name__ == '__main__':
     args = sys.argv[1:]
     syntaxes_dir = args[0]
     scopes_dir = args[1]
+    summary = args[2]
 
     count = {}
 
@@ -74,9 +110,13 @@ if __name__ == '__main__':
         with open(out_path, 'w') as out:
             scopes = extract_scopes(os.path.join(syntaxes_dir, filename))
             for scope in scopes:
-                increment_count(count, scope)
+                if scope in count:
+                    count[scope] += 1
+                else:
+                    count[scope] = 1
+
                 out.write(scope)
                 out.write('\n')
-            print 'found', len(scopes), 'scopes in syntax file', os.path.basename(filename)
+            print 'found', len(scopes), 'scopes in theme file', os.path.basename(filename)
 
-    write_summary(count, 'summary.syntaxes.txt')
+    write_summary(count, summary)
