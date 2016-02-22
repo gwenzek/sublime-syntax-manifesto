@@ -8,6 +8,14 @@ def load_scopes(filename):
             yield parts[0], int(parts[1])
 
 
+def scope_is_valide(scope):
+    languages = ['html', 'js', 'css', 'ruby', 'php', 'shell', 'makefile', 'sql', 'markdown', 'json', 'latex', 'xml', 'tex', 'yaml', 'diff', 'c', 'python', 'begin', 'end']
+    if any(scope.endswith('.' + ext) for ext in languages):
+        return False
+
+    return True
+
+
 if __name__ == '__main__':
     args = sys.argv[1:]
     syntax_scopes = list(load_scopes(args[0]))
@@ -20,6 +28,16 @@ if __name__ == '__main__':
         for scope, count in theme_scopes:
             if scope not in syntax_dict:
                 o.write('%s\t%d\n' % (scope, count))
+
+    cleaned = 0
+    with open('summary.themes.cleaned.txt', 'w') as o:
+        for scope, count in theme_scopes:
+            if scope in syntax_dict and count > 2:
+                if scope_is_valide(scope):
+                    o.write('%s\t%d\n' % (scope, count))
+                    cleaned += 1
+
+    print 'Themes uses %d scopes, %d after cleaning' % (len(theme_scopes), cleaned)
 
     with open('summary.not_matched.txt', 'w') as o:
         for scope, count in syntax_scopes:

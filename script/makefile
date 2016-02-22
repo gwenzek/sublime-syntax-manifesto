@@ -1,6 +1,6 @@
 .DELETE_ON_ERROR:
 
-all: syntaxes themes
+all: summary
 
 download: Packages.zip Themes.zip
 
